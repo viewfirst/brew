@@ -125,7 +125,6 @@ module Homebrew
           installed:,
           deprecated:       formula&.deprecated? == true,
           disabled:         formula&.disabled? == true,
-          incompatible:     formula&.incompatible? == true,
           mark_uninstalled: false,
         )
       end
@@ -172,7 +171,6 @@ module Homebrew
           installed:        cask.installed?,
           deprecated:       cask.deprecated?,
           disabled:         cask.disabled?,
-          incompatible:     cask.incompatible?,
           mark_uninstalled: false,
         )
       rescue Homebrew::UntrustedTapError, Cask::CaskUnavailableError
