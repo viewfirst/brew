@@ -2887,6 +2887,17 @@ class Formula # rubocop:disable Metrics/ClassLength
     supports_macos? && supports_linux?
   end
 
+  # True if an OS, macOS version or architecture requirement isn't met on this system.
+  sig { returns(T::Boolean) }
+  def incompatible?
+    requirements.any? do |requirement|
+      case requirement
+      when ArchRequirement, LinuxRequirement, MacOSRequirement then !requirement.satisfied?
+      else false
+      end
+    end
+  end
+
   sig { returns(T::Boolean) }
   def supports_macos?
     !active_spec.depends_on_linux_set_top_level?
