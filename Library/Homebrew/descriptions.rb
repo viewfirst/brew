@@ -126,12 +126,12 @@ class Descriptions
       end
       return printed_name if formula_or_cask.nil?
 
-      if formula_or_cask.deprecated?
-        Homebrew::Search.pretty_deprecated(printed_name)
-      elsif formula_or_cask.disabled?
+      if formula_or_cask.disabled?
         Homebrew::Search.pretty_disabled(printed_name)
       elsif formula_or_cask.incompatible?
         Homebrew::Search.pretty_incompatible(printed_name)
+      elsif formula_or_cask.deprecated?
+        Homebrew::Search.pretty_deprecated(printed_name)
       else
         printed_name
       end
