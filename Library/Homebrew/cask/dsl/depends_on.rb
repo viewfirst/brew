@@ -54,6 +54,7 @@ module Cask
         @macos_bare_set_top_level = T.let(false, T::Boolean)
         @macos_version_set_top_level = T.let(false, T::Boolean)
         @maximum_macos_set_top_level = T.let(false, T::Boolean)
+        @linux_required = T.let(false, T::Boolean)
         @linux_set_top_level = T.let(false, T::Boolean)
       end
 
@@ -159,7 +160,7 @@ module Cask
       def requires_macos? = @macos_required
 
       sig { returns(T::Boolean) }
-      def requires_linux? = @linux_set_top_level
+      def requires_linux? = @linux_required
 
       sig { params(key: Symbol, set_in_block: T::Boolean, os_scoped: T::Boolean).void }
       def record_os_requirement(key, set_in_block:, os_scoped:)
@@ -175,6 +176,8 @@ module Cask
 
           record_macos_requirement(maximum_macos, set_in_block:, os_scoped:)
         when :linux
+          # Like a macOS dependency, one inside an `on_arm`/`on_intel` block applies on that architecture.
+          @linux_required = true unless os_scoped
           return if set_in_block
           raise "`depends_on :linux` cannot be combined with `depends_on macos:`" if requires_macos?
 
@@ -191,7 +194,7 @@ module Cask
 
         return if set_in_block
 
-        raise "`depends_on :linux` cannot be combined with `depends_on macos:`" if requires_linux?
+        raise "`depends_on :linux` cannot be combined with `depends_on macos:`" if @linux_set_top_level
 
         if !requirement.version_specified?
           raise "`depends_on :macos` cannot be combined with another macOS `depends_on`" if @macos_bare_set_top_level
