@@ -118,7 +118,7 @@ class Descriptions
       Homebrew::Search.pretty_disabled(printed_name)
     else
       formula_or_cask = begin
-        Formulary.factory(full_name)
+        description.is_a?(Array) ? Cask::CaskLoader.load(full_name) : Formulary.factory(full_name)
       rescue FormulaUnavailableError
         Cask::CaskLoader.load(full_name)
       rescue Cask::CaskUnavailableError
